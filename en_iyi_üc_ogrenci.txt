@@ -1,0 +1,59 @@
+FOR EACH student IN students
+    name = student["name"]
+    scores = student["scores"]
+
+    sum = 0
+    FOR EACH score IN scores
+        sum = sum + score
+    END FOR
+    avg = sum / LENGTH(scores)
+
+    grade = letter_grade(avg)
+    results.APPEND((name, avg, grade))
+
+    total_sum = total_sum + sum
+    total_count = total_count + LENGTH(scores)
+
+    IF avg > best_avg
+        best_avg = avg
+        best_name = name
+    END IF
+END FOR
+
+class_avg = total_sum / total_count
+
+sorted_results = SORT(results BY avg IN DESCENDING ORDER)
+top_n = 3
+top3 = []
+FOR i = 0 TO MIN(top_n, LENGTH(sorted_results)) - 1
+    top3.APPEND(sorted_results[i])
+END FOR
+
+above_80 = []
+FOR EACH name, avg, grade IN results
+    IF avg >= 80
+        above_80.APPEND(name)
+    END IF
+END FOR
+
+PRINT "=== Öğrenci Raporu ==="
+FOR EACH name, avg, grade IN results
+    PRINT name + " | Ortalama: " + avg + " | Harf: " + grade
+END FOR
+
+PRINT "\n=== Sınıf Özeti ==="
+PRINT "Sınıf ortalaması: " + class_avg
+PRINT "En iyi öğrenci: " + best_name + " (" + best_avg + ")"
+
+PRINT "\n=== Top-3 ==="
+FOR rank = 1 TO LENGTH(top3)
+    name, avg, grade = top3[rank_-_1]
+    PRINT rank + ". " + name + " - " + avg + " (" + grade + ")"
+END FOR
+
+PRINT "\n=== 80+ Ortalama Olanlar ==="
+IF LENGTH(above_80) > 0
+    PRINT JOIN(above_80, ", ")
+ELSE
+    PRINT "Yok"
+END IF
