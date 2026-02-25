@@ -1,0 +1,39 @@
+DECLARE students AS dictionary
+  students["Ayse"] = 78
+  students["Mehmet"] = 65
+  students["Zeynep"] = 92
+  students["Can"] = 55
+  students["Elif"] = 80
+  students["Ali"] = 73
+  students["Deniz"] = 88
+  students["Ece"] = 60
+  students["Kerem"] = 49
+  students["Seda"] = 95
+
+FUNCTION get_letter_grade(student_name)
+  IF student_name NOT IN students THEN
+    RETURN "Öğrenci bulunamadı."
+  END IF
+
+  DECLARE score = students[student_name]
+
+  IF score < 0 OR score > 100 THEN
+    RETURN "Geçersiz puan."
+  END IF
+
+  IF score >= 90 THEN
+    RETURN "A"
+  ELSE IF score >= 80 THEN
+    RETURN "B"
+  ELSE IF score >= 70 THEN
+    RETURN "C"
+  ELSE IF score >= 60 THEN
+    RETURN "D"
+  ELSE
+    RETURN "F"
+  END IF
+END FUNCTION
+
+// Örnek kullanım:
+DECLARE name = INPUT("Öğrenci ismi gir: ")
+PRINT(get_letter_grade(name))
