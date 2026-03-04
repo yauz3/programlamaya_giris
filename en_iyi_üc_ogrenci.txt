@@ -1,59 +1,96 @@
-FOR EACH student IN students
-    name = student["name"]
-    scores = student["scores"]
+PSEUDO KOD: For Loop ile Not Analizi + Harf Notu + Top-3 + Özet
 
-    sum = 0
-    FOR EACH score IN scores
-        sum = sum + score
-    END FOR
-    avg = sum / LENGTH(scores)
+BAŞLA
+
+students listesi oluştur
+    her eleman: {"name": <isim>, "scores": [puan1, puan2, puan3]}
+
+FONKSİYON letter_grade(avg)
+    EĞER avg >= 90 ise DÖNDÜR "A"
+    DEĞİLSE EĞER avg >= 80 ise DÖNDÜR "B"
+    DEĞİLSE EĞER avg >= 70 ise DÖNDÜR "C"
+    DEĞİLSE EĞER avg >= 60 ise DÖNDÜR "D"
+    DEĞİLSE DÖNDÜR "F"
+    EĞER BİTİR
+FONKSİYON BİTİR
+
+
+results = boş liste
+total_sum = 0
+total_count = 0
+best_avg = -1
+best_name = boş
+
+# Ana döngü: öğrencileri dolaş
+HER öğrenci s İÇİN students içinde
+    name = s["name"]
+    scores = s["scores"]
+
+    # İç içe döngü: puanları topla
+    s_sum = 0
+    HER puan sc İÇİN scores içinde
+        s_sum = s_sum + sc
+    DÖNGÜ BİTİR
+
+    avg = s_sum / scores uzunluğu
 
     grade = letter_grade(avg)
-    results.APPEND((name, avg, grade))
 
-    total_sum = total_sum + sum
-    total_count = total_count + LENGTH(scores)
+    results listesine (name, avg, grade) ekle
 
-    IF avg > best_avg
+    total_sum = total_sum + s_sum
+    total_count = total_count + scores uzunluğu
+
+    EĞER avg > best_avg ise
         best_avg = avg
         best_name = name
-    END IF
-END FOR
+    EĞER BİTİR
+DÖNGÜ BİTİR
 
 class_avg = total_sum / total_count
 
-sorted_results = SORT(results BY avg IN DESCENDING ORDER)
+
+# Top-3 için sıralama
+sorted_results = results'u avg değerine göre azalan sırala
 top_n = 3
-top3 = []
-FOR i = 0 TO MIN(top_n, LENGTH(sorted_results)) - 1
-    top3.APPEND(sorted_results[i])
-END FOR
+top3 = boş liste
 
-above_80 = []
-FOR EACH name, avg, grade IN results
-    IF avg >= 80
-        above_80.APPEND(name)
-    END IF
-END FOR
+i = 0'dan min(top_n, sorted_results uzunluğu) - 1'e kadar
+    top3 listesine sorted_results[i] ekle
+DÖNGÜ BİTİR
 
-PRINT "=== Öğrenci Raporu ==="
-FOR EACH name, avg, grade IN results
-    PRINT name + " | Ortalama: " + avg + " | Harf: " + grade
-END FOR
 
-PRINT "\n=== Sınıf Özeti ==="
-PRINT "Sınıf ortalaması: " + class_avg
-PRINT "En iyi öğrenci: " + best_name + " (" + best_avg + ")"
+# 80+ filtreleme
+above_80 = boş liste
+HER (name, avg, grade) İÇİN results içinde
+    EĞER avg >= 80 ise
+        above_80 listesine name ekle
+    EĞER BİTİR
+DÖNGÜ BİTİR
 
-PRINT "\n=== Top-3 ==="
-FOR rank = 1 TO LENGTH(top3)
-    name, avg, grade = top3[rank_-_1]
-    PRINT rank + ". " + name + " - " + avg + " (" + grade + ")"
-END FOR
 
-PRINT "\n=== 80+ Ortalama Olanlar ==="
-IF LENGTH(above_80) > 0
-    PRINT JOIN(above_80, ", ")
-ELSE
-    PRINT "Yok"
-END IF
+# Rapor yazdırma
+"=== Öğrenci Raporu ===" yazdır
+HER (name, avg, grade) İÇİN results içinde
+    "{name} | Ortalama: {avg} | Harf: {grade}" yazdır
+DÖNGÜ BİTİR
+
+"=== Sınıf Özeti ===" yazdır
+"Sınıf ortalaması: {class_avg}" yazdır
+"En iyi öğrenci: {best_name} ({best_avg})" yazdır
+
+"=== Top-3 ===" yazdır
+rank = 1
+HER (name, avg, grade) İÇİN top3 içinde
+    "{rank}. {name} - {avg} ({grade})" yazdır
+    rank = rank + 1
+DÖNGÜ BİTİR
+
+"=== 80+ Ortalama Olanlar ===" yazdır
+EĞER above_80 boş değilse
+    isimleri virgülle birleştirip yazdır
+DEĞİLSE
+    "Yok" yazdır
+EĞER BİTİR
+
+BİTİR
