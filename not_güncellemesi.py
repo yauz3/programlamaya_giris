@@ -1,116 +1,101 @@
-Define a dictionary to store student information
+from __future__ import annotations
 
-DECLARE students AS DICTIONARY OF STRING * FLOAT
-students = {
-"Ayse": 78,
-"Mehmet": 65,
-"Zeynep": 92,
-"Can": 55,
-"Elif": 80,
-"Ali": 73,
-"Deniz": 88,
-"Ece": 60,
-"Kerem": 49,
-"Seda": 95,
+students: dict[str, float] = {
+    "Ayse": 78,
+    "Mehmet": 65,
+    "Zeynep": 92,
+    "Can": 55,
+    "Elif": 80,
+    "Ali": 73,
+    "Deniz": 88,
+    "Ece": 60,
+    "Kerem": 49,
+    "Seda": 95,
 }
 
-Function to determine letter grade
+def letter(score: float) -> str:
+    if score < 0 or score > 100:
+        return "INVALID"
+    elif score >= 90:
+        return "A"
+    elif score >= 80:
+        return "B"
+    elif score >= 70:
+        return "C"
+    elif score >= 60:
+        return "D"
+    else:
+        return "F"
 
-FUNCTION letter(score: FLOAT) RETURNS STRING
-IF score < 0 OR score > 100 THEN
-RETURN "INVALID"
-ELSE IF score >= 90 THEN
-RETURN "A"
-ELSE IF score >= 80 THEN
-RETURN "B"
-ELSE IF score >= 70 THEN
-RETURN "C"
-ELSE IF score >= 60 THEN
-RETURN "D"
-ELSE
-RETURN "F"
-END FUNCTION
+def add_or_update(name: str, score: float) -> bool:
+    if not name or score < 0 or score > 100:
+        return False
+    students[name] = score
+    return True
 
-Function to add or update student information
+def summary() -> tuple[float, int, str]:
+    total = 0.0
+    best_name: str | None = None
+    best_score = -1.0
 
-FUNCTION add_or_update(name: STRING, score: FLOAT) RETURNS BOOLEAN
-IF name IS EMPTY OR score < 0 OR score > 100 THEN
-RETURN FALSE
-ELSE
-students[name] = score
-RETURN TRUE
-END FUNCTION
+    for name, score in students.items():
+        total += score
+        if score > best_score:
+            best_score = score
+            best_name = name
 
-Function to calculate summary statistics
+    avg = total / len(students) if students else 0.0
+    return (avg, len(students), best_name if best_name else "-")
 
-FUNCTION summary() RETURNS TUPLE[FLOAT,_INTEGER,_STRING]
-DECLARE total AS FLOAT = 0.0
-DECLARE best_name AS STRING = NULL
-DECLARE best_score AS FLOAT = -1.0
+def list_above(threshold: float) -> list[str]:
+    names: list[str] = []
+    for name, score in students.items():
+        if score >= threshold:
+            names.append(name)
+    return names
 
-FOR EACH student IN students
-    total = total + student.score
-    IF student.score > best_score THEN
-        best_score = student.score
-        best_name = student.name
+def main() -> None:
+    while True:
+        print("\n1) Harf notu sor  2) Ekle/Güncelle  3) Özet  4) 80+ Liste  5) Çıkış")
+        choice = input("Seçim: ").strip()
 
-DECLARE avg AS FLOAT = total / LENGTH(students) IF students ELSE 0.0
-RETURN (avg, LENGTH(students), best_name IF best_name ELSE "-")
+        if choice == "1":
+            name = input("İsim: ").strip()
+            if name not in students:
+                print("Yok.")
+            else:
+                sc = float(students[name])
+                print(f"{name} -> {sc} -> {letter(sc)}")
 
-END FUNCTION
+        elif choice == "2":
+            name = input("İsim: ").strip()
+            score_text = input("Puan (0-100): ").strip()
+            try:
+                sc = float(score_text)
+            except ValueError:
+                print("Puan sayı olmalı.")
+                continue
 
-Function to list students above a threshold
+            ok = add_or_update(name, sc)
+            print("Kaydedildi." if ok else "Hatalı giriş.")
 
-FUNCTION list_above(threshold: FLOAT) RETURNS LIST[STRING]
-DECLARE names AS LIST[STRING] = EMPTY LIST
+        elif choice == "3":
+            avg, count, best = summary()
+            print(f"Kişi: {count} | Ortalama: {avg:.1f} | En yüksek: {best}")
 
-FOR EACH student IN students
-    IF student.score >= threshold THEN
-        APPEND student.name TO names
+        elif choice == "4":
+            thresh = 80.0
+            names = list_above(thresh)
+            if names:
+                print(f"{thresh}+ olanlar ({len(names)} kişi): {', '.join(names)}")
+            else:
+                print("Yok")
 
-RETURN names
+        elif choice == "5":
+            break
 
-END FUNCTION
+        else:
+            print("Geçersiz seçim.")
 
-Main program loop
-
-WHILE TRUE
-PRINT "\n1) Harf notu sor 2) Ekle/Güncelle 3) Özet 4) 80+ Liste 5) Çıkış"
-DECLARE choice AS STRING = INPUT("Seçim: ").strip()
-
-IF choice = "1" THEN
-    DECLARE name AS STRING = INPUT("İsim: ").strip()
-    IF name NOT IN students THEN
-        PRINT "Yok."
-    ELSE
-        DECLARE sc AS FLOAT = students[name]
-        PRINT name + " -> " + sc + " -> " + letter(sc)
-
-ELSE IF choice = "2" THEN
-    DECLARE name AS STRING = INPUT("İsim: ").strip()
-    DECLARE score_text AS STRING = INPUT("Puan (0-100): ").strip()
-    TRY
-        DECLARE sc AS FLOAT = CONVERT(score_text TO FLOAT)
-    EXCEPT VALUE_ERROR
-        PRINT "Puan sayı olmalı."
-        CONTINUE
-
-    DECLARE ok AS BOOLEAN = add_or_update(name, sc)
-    PRINT "Kaydedildi." IF ok ELSE "Hatalı giriş."
-
-ELSE IF choice = "3" THEN
-    DECLARE avg AS FLOAT, count AS INTEGER, best AS STRING
-    (avg, count, best) = summary()
-    PRINT "Kişi: " + count + " | Ortalama: " + avg + " | En yüksek: " + best
-
-ELSE IF choice = "4" THEN
-    DECLARE thresh AS FLOAT = 80.0
-    DECLARE names AS LIST[STRING] = list_above(thresh)
-    PRINT thresh + "+ olanlar (" + LENGTH(names) + " kişi): " + JOIN(names, ", ") IF names ELSE 'Yok'
-
-ELSE IF choice = "5" THEN
-    BREAK
-ELSE
-    PRINT "Geçersiz seçim."
-
-END WHILE
+if __name__ == "__main__":
+    main()
