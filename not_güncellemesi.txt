@@ -1,39 +1,129 @@
-DECLARE students AS dictionary
-  students["Ayse"] = 78
-  students["Mehmet"] = 65
-  students["Zeynep"] = 92
-  students["Can"] = 55
-  students["Elif"] = 80
-  students["Ali"] = 73
-  students["Deniz"] = 88
-  students["Ece"] = 60
-  students["Kerem"] = 49
-  students["Seda"] = 95
+PSEUDO KOD: Mini Öğrenci Takip Uygulaması (Menu + Fonksiyonlar)
 
-FUNCTION get_letter_grade(student_name)
-  IF student_name NOT IN students THEN
-    RETURN "Öğrenci bulunamadı."
-  END IF
+BAŞLA
 
-  DECLARE score = students[student_name]
+students sözlüğünü oluştur (isim -> puan)
+    "Ayse" -> 78
+    "Mehmet" -> 65
+    ...
+    "Seda" -> 95
 
-  IF score < 0 OR score > 100 THEN
-    RETURN "Geçersiz puan."
-  END IF
 
-  IF score >= 90 THEN
-    RETURN "A"
-  ELSE IF score >= 80 THEN
-    RETURN "B"
-  ELSE IF score >= 70 THEN
-    RETURN "C"
-  ELSE IF score >= 60 THEN
-    RETURN "D"
-  ELSE
-    RETURN "F"
-  END IF
-END FUNCTION
+FONKSİYON letter(score)
+    EĞER score < 0 VEYA score > 100 ise
+        "INVALID" DÖNDÜR
+    DEĞİLSE EĞER score >= 90 ise
+        "A" DÖNDÜR
+    DEĞİLSE EĞER score >= 80 ise
+        "B" DÖNDÜR
+    DEĞİLSE EĞER score >= 70 ise
+        "C" DÖNDÜR
+    DEĞİLSE EĞER score >= 60 ise
+        "D" DÖNDÜR
+    DEĞİLSE
+        "F" DÖNDÜR
+    EĞER BİTİR
+FONKSİYON BİTİR
 
-// Örnek kullanım:
-DECLARE name = INPUT("Öğrenci ismi gir: ")
-PRINT(get_letter_grade(name))
+
+FONKSİYON add_or_update(name, score)
+    EĞER name boş ise VEYA score < 0 VEYA score > 100 ise
+        False DÖNDÜR
+    DEĞİLSE
+        students[name] = score   // sözlüğe ekle veya güncelle
+        True DÖNDÜR
+    EĞER BİTİR
+FONKSİYON BİTİR
+
+
+FONKSİYON summary()
+    total = 0
+    best_name = boş
+    best_score = -1
+
+    HER (name, score) İÇİN students içinde
+        total = total + score
+        EĞER score > best_score ise
+            best_score = score
+            best_name = name
+        EĞER BİTİR
+    DÖNGÜ BİTİR
+
+    EĞER students boş değilse
+        avg = total / students eleman sayısı
+    DEĞİLSE
+        avg = 0
+    EĞER BİTİR
+
+    EĞER best_name boş ise best_name = "-"
+    (avg, öğrenci_sayısı, best_name) DÖNDÜR
+FONKSİYON BİTİR
+
+
+FONKSİYON list_above(threshold)
+    names = boş liste
+
+    HER (name, score) İÇİN students içinde
+        EĞER score >= threshold ise
+            names listesine name ekle
+        EĞER BİTİR
+    DÖNGÜ BİTİR
+
+    names DÖNDÜR
+FONKSİYON BİTİR
+
+
+ANA PROGRAM main()
+    DÖNGÜ sonsuza kadar
+        menüyü yazdır:
+            "1) Harf notu sor 2) Ekle/Güncelle 3) Özet 4) 80+ Liste 5) Çıkış"
+        choice = kullanıcıdan seçim al
+
+        EĞER choice == "1" ise
+            name = kullanıcıdan isim al
+            EĞER name students içinde YOKSA
+                "Yok." yazdır
+            DEĞİLSE
+                sc = students[name]
+                "{name} -> {sc} -> {letter(sc)}" yazdır
+            EĞER BİTİR
+
+        DEĞİLSE EĞER choice == "2" ise
+            name = kullanıcıdan isim al
+            score_text = kullanıcıdan puan al
+            EĞER score_text sayı değilse
+                "Puan sayı olmalı." yazdır
+                döngünün başına DÖN (continue)
+            EĞER BİTİR
+
+            sc = score_text'i sayıya çevir
+            ok = add_or_update(name, sc)
+            EĞER ok True ise
+                "Kaydedildi." yazdır
+            DEĞİLSE
+                "Hatalı giriş." yazdır
+            EĞER BİTİR
+
+        DEĞİLSE EĞER choice == "3" ise
+            (avg, count, best) = summary()
+            "Kişi: {count} | Ortalama: {avg} | En yüksek: {best}" yazdır
+
+        DEĞİLSE EĞER choice == "4" ise
+            thresh = 80
+            names = list_above(thresh)
+            EĞER names boş değilse
+                "{thresh}+ olanlar (kaç kişi): isimleri yazdır" yazdır
+            DEĞİLSE
+                "Yok" yazdır
+            EĞER BİTİR
+
+        DEĞİLSE EĞER choice == "5" ise
+            DÖNGÜDEN ÇIK (break)
+
+        DEĞİLSE
+            "Geçersiz seçim." yazdır
+        EĞER BİTİR
+    DÖNGÜ BİTİR
+PROGRAM BİTİR
+
+BİTİR
