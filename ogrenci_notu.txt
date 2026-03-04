@@ -1,39 +1,45 @@
-DECLARE students AS dictionary
-  students["Ayse"] = 78
-  students["Mehmet"] = 65
-  students["Zeynep"] = 92
-  students["Can"] = 55
-  students["Elif"] = 80
-  students["Ali"] = 73
-  students["Deniz"] = 88
-  students["Ece"] = 60
-  students["Kerem"] = 49
-  students["Seda"] = 95
+PSEUDO KOD: 10 Öğrencilik Sözlük + İsim Gir → Harf Notu Döndür
 
-FUNCTION get_letter_grade(student_name)
-  IF student_name NOT IN students THEN
-    RETURN "Öğrenci bulunamadı."
-  END IF
+BAŞLA
 
-  DECLARE score = students[student_name]
+students adlı sözlük oluştur
+    "Ayse" -> 78
+    "Mehmet" -> 65
+    ...
+    "Seda" -> 95
 
-  IF score < 0 OR score > 100 THEN
-    RETURN "Geçersiz puan."
-  END IF
 
-  IF score >= 90 THEN
-    RETURN "A"
-  ELSE IF score >= 80 THEN
-    RETURN "B"
-  ELSE IF score >= 70 THEN
-    RETURN "C"
-  ELSE IF score >= 60 THEN
-    RETURN "D"
-  ELSE
-    RETURN "F"
-  END IF
-END FUNCTION
+FONKSİYON get_letter_grade(student_name)
+    EĞER student_name students sözlüğünde YOKSA
+        "Öğrenci bulunamadı." DÖNDÜR
+    EĞER BİTİR
 
-// Örnek kullanım:
-DECLARE name = INPUT("Öğrenci ismi gir: ")
-PRINT(get_letter_grade(name))
+    score = students[student_name]  // sözlükten puanı al
+
+    EĞER score < 0 VEYA score > 100 ise
+        "Geçersiz puan." DÖNDÜR
+    EĞER BİTİR
+
+    EĞER score >= 90 ise
+        "A" DÖNDÜR
+    DEĞİLSE EĞER score >= 80 ise
+        "B" DÖNDÜR
+    DEĞİLSE EĞER score >= 70 ise
+        "C" DÖNDÜR
+    DEĞİLSE EĞER score >= 60 ise
+        "D" DÖNDÜR
+    DEĞİLSE
+        "F" DÖNDÜR
+    EĞER BİTİR
+FONKSİYON BİTİR
+
+
+# Örnek kullanım (ana akış)
+kullanıcıdan "Öğrenci ismi gir" girişi al
+girişin baş/son boşluklarını temizle (strip)
+
+sonuç = get_letter_grade(girilen_isim)
+
+sonucu ekrana yazdır
+
+BİTİR
