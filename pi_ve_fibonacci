@@ -2,51 +2,75 @@ PSEUDO KOD: Pi / Fibonacci Menü Uygulaması
 
 BAŞLA
 
-FONKSİYON SecimAl():
-    DÖNGÜ sonsuza kadar:
+FONKSİYON SecimAl()
+    DÖNGÜ sonsuza kadar
         kullanıcıdan "Pi için 1, Fibonacci için 2 seçin" girişi al
-        EĞER giriş "1" veya "2" ise:
-            SEÇİMİ tamsayıya çevir ve DÖNDÜR
-        DEĞİLSE:
+        EĞER giriş "1" veya "2" ise
+            SEÇİMİ tamsayıya çevir
+            SEÇİMİ DÖNDÜR
+        DEĞİLSE
             "Hata: Lütfen 1 veya 2'yi seçin." yazdır
+        EĞER BİTİR
+    DÖNGÜ BİTİR
+FONKSİYON BİTİR
 
-FONKSİYON NAl():
-    DÖNGÜ sonsuza kadar:
-        kullanıcıdan "N değerini girin" girişi al
-        EĞER giriş tamsayıya çevrilebiliyorsa:
-            N'i DÖNDÜR
-        DEĞİLSE:
+
+FONKSİYON NAlVeDogrula()
+    DÖNGÜ sonsuza kadar
+        kullanıcıdan "N değerini girin (0-7): " girişi al
+
+        EĞER giriş tamsayıya çevrilemiyorsa
             "Hata: N bir tamsayı olmalı." yazdır
+            DEVAM ET
+        EĞER BİTİR
 
-FONKSİYON NKontrolEt(N):
-    EĞER N > 7 ise:
-        "Lütfen {N} sayısını azaltınız." yazdır
-        False DÖNDÜR
-    AKSİ HALDE:
-        True DÖNDÜR
+        N = tamsayı(giriş)
 
-FONKSİYON PiYazdir(N):
-    Pi sayısını N ondalık basamakla formatla
-    Formatlanmış Pi değerini yazdır
+        EĞER N < 0 ise
+            "Hata: N negatif olamaz." yazdır
+            DEVAM ET
+        EĞER BİTİR
 
-FONKSİYON FibonacciTopla(N):
-    a = 0, b = 1, toplam = 0
-    a <= N olduğu sürece:
+        EĞER N > 7 ise
+            "Lütfen {N} sayısını azaltınız." yazdır
+            PROGRAMI BİTİR
+        EĞER BİTİR
+
+        N'i DÖNDÜR
+    DÖNGÜ BİTİR
+FONKSİYON BİTİR
+
+
+FONKSİYON PiYazdir(N)
+    Pi sayısını N ondalık basamak ile formatla
+    "π (N basamak): {pi}" yazdır
+FONKSİYON BİTİR
+
+
+FONKSİYON FibonacciTopla(N)
+    a = 0
+    b = 1
+    toplam = 0
+
+    a <= N olduğu sürece
         toplam = toplam + a
-        (a, b) = (b, a + b)  // Fibonacci ilerlet
+        (a, b) = (b, a + b)   // Python mantığı: tuple assignment
+    DÖNGÜ BİTİR
+
     toplamı DÖNDÜR
+FONKSİYON BİTİR
 
-ANA PROGRAM (Main):
+
+ANA PROGRAM (Main)
     secim = SecimAl()
-    N = NAl()
+    N = NAlVeDogrula()
 
-    EĞER NKontrolEt(N) False ise:
-        PROGRAMI BİTİR
-
-    EĞER secim == 1 ise:
+    EĞER secim == 1 ise
         PiYazdir(N)
-    DEĞİLSE (secim == 2):
+    DEĞİLSE
         toplam = FibonacciTopla(N)
-        "Fibonacci toplamı: {toplam}" yazdır
+        "N için (<=N) Fibonacci toplamı: {toplam}" yazdır
+    EĞER BİTİR
+PROGRAM BİTİR
 
 BİTİR
