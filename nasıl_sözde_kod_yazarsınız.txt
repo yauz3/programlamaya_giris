@@ -1,0 +1,48 @@
+BAŞLA
+
+FONKSİYON SayiAl(mesaj)
+ DENE
+  kullanıcıdan mesaj ile giriş al
+  girişi ondalıklı sayıya çevir
+  sayıyı DÖNDÜR
+ HATA YAKALA ValueError
+  "Hata: Lütfen geçerli bir sayı girin." yazdır
+  None DÖNDÜR
+FONKSİYON BİTİR
+
+FONKSİYON BolmeYap(sayi1, sayi2)
+ DENE
+  sonuc = sayi1 / sayi2
+  sonuc değerini DÖNDÜR
+ HATA YAKALA ZeroDivisionError
+  "Hata: Bir sayı 0'a bölünemez." yazdır
+  None DÖNDÜR
+FONKSİYON BİTİR
+
+FONKSİYON AnaProgram()
+ "Bölme programına hoş geldiniz." yazdır
+
+ sayi1 = SayiAl("Birinci sayıyı girin: ")
+
+ EĞER sayi1 == None ise
+  fonksiyondan çık
+ EĞER BİTİR
+
+ sayi2 = SayiAl("İkinci sayıyı girin: ")
+
+ EĞER sayi2 == None ise
+  fonksiyondan çık
+ EĞER BİTİR
+
+ sonuc = BolmeYap(sayi1, sayi2)
+
+ EĞER sonuc != None ise
+  "İşlem sonucu: {sonuc}" yazdır
+ EĞER BİTİR
+FONKSİYON BİTİR
+
+ANA PROGRAM (Main)
+ AnaProgram() çağır
+PROGRAM BİTİR
+
+BİTİR

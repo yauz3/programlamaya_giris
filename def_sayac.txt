@@ -1,0 +1,28 @@
+BAŞLA
+
+FONKSİYON Ana()
+ sayac = 0
+ toplam = 0
+
+ DÖNGÜ sayac < 3 olduğu sürece
+  DENE
+   kullanıcıdan "Bir sayı girin: " girişi al
+   girişi tam sayıya çevir
+   toplam = toplam + sayi
+   sayac = sayac + 1
+  HATA YAKALA ValueError
+   "Hata: Lütfen tam sayı girin." yazdır
+  DENE BİTİR
+ DÖNGÜ BİTİR
+
+ "Girilen sayıların toplamı: {toplam}" yazdır
+FONKSİYON BİTİR
+
+ANA PROGRAM (Main)
+ Ana() çağır
+ "Program bitti." yazdır
+ "Teşekkürler." yazdır
+ "Yine bekleriz." yazdır
+PROGRAM BİTİR
+
+BİTİR
